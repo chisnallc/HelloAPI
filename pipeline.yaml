@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Stack description
+​
+Resources:
+  CodePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      Name: nameOfYourPipeline # Change this
+      RoleArn: arn:aws:iam::443973347065:role/Codepipeline-Setup-CodePipelineServiceRole-TX3O4OHLA4TS
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceAction
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: '1'
+                Provider: GitHub
+              OutputArtifacts:
+                - Name: GitHubSource
+              Configuration:
+                Owner: chisnallc
+                Repo: HelloApi
+                Branch: master //would this be main?
+                # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
+                PollForSourceChanges: false
+              RunOrder: 1
+Collapse
+
+
+
