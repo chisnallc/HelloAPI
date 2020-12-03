@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Stack description
-​
+
 Resources:
   CodePipeline:
     Type: 'AWS::CodePipeline::Pipeline'
     Properties:
-      Name: nameOfYourPipeline # Change this
+      Name: codepipeline-newapi 
       RoleArn: arn:aws:iam::443973347065:role/Codepipeline-Setup-CodePipelineServiceRole-TX3O4OHLA4TS
       Stages:
         - Name: Source
@@ -21,11 +21,11 @@ Resources:
               Configuration:
                 Owner: chisnallc
                 Repo: HelloApi
-                Branch: master //would this be main?
+                Branch: main
                 # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
                 PollForSourceChanges: false
               RunOrder: 1
-Collapse
+
 
 
 
