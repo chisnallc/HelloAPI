@@ -1,30 +1,80 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Stack description
+Description: Codepipeline stack for codepipeline-newapi
 
 Resources:
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          -
+            Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::749144762306:policy/codebuildpolicy
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: codepipeline-newapi 
+      Description: Codepipeline stack for codepipeline-newapi
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      EncryptionKey: alias/codepipeline-kms-key
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:3.0
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: buildspec.yml
+      TimeoutInMinutes: 10
+      Artifacts:
+        Type: CODEPIPELINE
+
   CodePipeline:
     Type: 'AWS::CodePipeline::Pipeline'
     Properties:
       Name: codepipeline-newapi 
-      RoleArn: arn:aws:iam::443973347065:role/Codepipeline-Setup-CodePipelineServiceRole-TX3O4OHLA4TS
-      Stages:
-        - Name: Source
-          Actions:
-            - Name: SourceAction
+      RoleArn: arn:aws:iam::749144762306:role/Codepipelinerole
+      ArtifactStore:
+        Type: S3
+        Location: codepipelinehelloapi
+        Stages: 
+          - Name: Source
+            Actions:
+              - Name: SourceAction
+                ActionTypeId:
+                  Category: Source
+                  Owner: ThirdParty
+                  Version: '1'
+                  Provider: GitHub
+                OutputArtifacts:
+                  - Name: GitHubSource
+                Configuration:
+                  Owner: chisnallc
+                  Repo: HelloApi
+                  Branch: main
+                  # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
+                  PollForSourceChanges: false
+                RunOrder: 1
+          - Name: Build  
+            Actions:
+            -
               ActionTypeId:
-                Category: Source
-                Owner: ThirdParty
+                Category: Build
+                Owner: AWS
                 Version: '1'
-                Provider: GitHub
-              OutputArtifacts:
+                Provider: CodeBuild
+              InputArtifacts:
                 - Name: GitHubSource
-              Configuration:
-                Owner: chisnallc
-                Repo: HelloApi
-                Branch: main
-                # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
-                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: BuildStack
               RunOrder: 1
+              Name: CodeBuild
+              Configuration:
+                ProjectName: !Ref 'CodeBuildProject'    
 
 
 
