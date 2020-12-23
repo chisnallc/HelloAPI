@@ -41,7 +41,7 @@ Resources:
       ArtifactStore:
         Type: S3
         Location: codepipelinehelloapi
-        Stages: 
+        Stages:
           - Name: Source
             Actions:
               - Name: SourceAction
@@ -59,7 +59,7 @@ Resources:
                   # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
                   PollForSourceChanges: false
                 RunOrder: 1
-          - Name: Build  
+          - Name: Build
             Actions:
             -
               ActionTypeId:
@@ -74,8 +74,4 @@ Resources:
               RunOrder: 1
               Name: CodeBuild
               Configuration:
-                ProjectName: !Ref 'CodeBuildProject'    
-
-
-
-
+                ProjectName: !Ref 'CodeBuildProject'
