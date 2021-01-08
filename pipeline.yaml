@@ -41,11 +41,11 @@ Resources:
       ArtifactStore:
         Type: S3
         Location: codepipelinehelloapi
-        Stages:
-          - Name: Source
-            Actions:
-              - Name: SourceAction
-                ActionTypeId:
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceAction
+              ActionTypeId:
                   Category: Source
                   Owner: ThirdParty
                   Version: '1'
