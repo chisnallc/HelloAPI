@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  Lambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: 'Lambda Name Here'
+      Handler: index.handler
+      Runtime: nodejs12.x
+      CodeUri: ../build
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: AllAtOnce
+      Description: Lambda for API Gateway backend
+      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      MemorySize: 128
+      Timeout: 600
+  LambdaLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: "/aws/lambda/rest-api-lambda"
+      RetentionInDays: 30
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      Policies:
+        -
+          PolicyName: CloudwatchLogs
+          PolicyDocument:
+            Statement:
+              -
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:GetLogEvents
+                  - logs:PutLogEvents
+                Resource:
+                  - !GetAtt [LambdaLogGroup, Arn]
+                Effect: Allow

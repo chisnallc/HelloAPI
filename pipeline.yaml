@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Codepipeline stack for codepipeline-newapi
-
+Parameters:
+  GitHubOAuthToken:
+    Type: String
+    NoEcho: true
 Resources:
   CodeBuildRole:
     Type: AWS::IAM::Role
@@ -56,7 +59,7 @@ Resources:
                 Owner: chisnallc
                 Repo: HelloApi
                 Branch: main
-                # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
+                OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
                 PollForSourceChanges: false
               RunOrder: 1
         - Name: Build
@@ -75,3 +78,34 @@ Resources:
             Name: CodeBuild
             Configuration:
               ProjectName: !Ref 'CodeBuildProject'
+          - Name: Deploy
+            Actions:
+              - Name: 'HelloApi-create-changeset'
+                ActionTypeId:
+                  Category: Deploy
+                  Owner: AWS
+                  Version: '1'
+                  Provider: CloudFormation
+                InputArtifacts:
+                  - Name: BuildStack
+                RunOrder: 1
+                Configuration:
+                  ActionMode: CHANGE_SET_REPLACE
+                  Capabilities: CAPABILITY_NAMED_IAM
+                  StackName: 'HelloApi-main-stack'
+                  ChangeSetName: 'HelloApi-changeset'
+                  RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
+                  TemplatePath: BuildStack::deploy/main.yml
+              - Name: HelloApi-runchangeset
+                ActionTypeId:
+                  Category: Deploy
+                  Owner: AWS
+                  Version: '1'
+                  Provider: CloudFormation
+                RunOrder: 2 
+                Configuration:
+                  ActionMode: CHANGE_SET_EXECUTE
+                  Capabilities: CAPABILITY_NAMED_IAM
+                  StackName: 'HelloApi-main-stack'
+                  ChangeSetName: 'HelloApi-changeset'
+                  RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
