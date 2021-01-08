@@ -46,32 +46,32 @@ Resources:
           Actions:
             - Name: SourceAction
               ActionTypeId:
-                  Category: Source
-                  Owner: ThirdParty
-                  Version: '1'
-                  Provider: GitHub
-                OutputArtifacts:
-                  - Name: GitHubSource
-                Configuration:
-                  Owner: chisnallc
-                  Repo: HelloApi
-                  Branch: main
-                  # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
-                  PollForSourceChanges: false
-                RunOrder: 1
-          - Name: Build
-            Actions:
-            -
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
+                Category: Source
+                Owner: ThirdParty
                 Version: '1'
-                Provider: CodeBuild
-              InputArtifacts:
-                - Name: GitHubSource
+                Provider: GitHub
               OutputArtifacts:
-                - Name: BuildStack
-              RunOrder: 1
-              Name: CodeBuild
+                - Name: GitHubSource
               Configuration:
-                ProjectName: !Ref 'CodeBuildProject'
+                Owner: chisnallc
+                Repo: HelloApi
+                Branch: main
+                # OAuthToken: !Ref GitHubOAuthToken # Maybe we dont need this because the repo is public
+                PollForSourceChanges: false
+              RunOrder: 1
+        - Name: Build
+          Actions:
+          -
+            ActionTypeId:
+              Category: Build
+              Owner: AWS
+              Version: '1'
+              Provider: CodeBuild
+            InputArtifacts:
+              - Name: GitHubSource
+            OutputArtifacts:
+              - Name: BuildStack
+            RunOrder: 1
+            Name: CodeBuild
+            Configuration:
+              ProjectName: !Ref 'CodeBuildProject'
