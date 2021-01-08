@@ -1,0 +1,14 @@
+# this file provides args to cfn-lint
+# see https://github.com/awslabs/cfn-python-lint
+templates:
+- *.yml
+- *.yaml
+
+include_checks:
+- I # this turns on INFO level rules
+
+ignore_checks:
+- W3011 # see: https://github.com/aws-cloudformation/cfn-python-lint/issues/1265
+- I3011 # see: https://github.com/aws-cloudformation/cfn-python-lint/issues/1265
+
+# See https://github.com/awslabs/cfn-python-lint/blob/master/docs/rules.md
