@@ -4,7 +4,7 @@ Resources:
   Lambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: 'Lambda Name Here'
+      FunctionName: 'HelloApi'
       Handler: index.handler
       Runtime: nodejs12.x
       CodeUri: ../build
