@@ -1,0 +1,7 @@
+MyRestApi:
+  Type: 'AWS::ApiGateway::RestApi'
+  Properties:
+    Body:
+      OpenAPI specification: null
+    Description: Project API
+    Name: gatewayAPI

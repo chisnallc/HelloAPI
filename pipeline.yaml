@@ -24,7 +24,7 @@ Resources:
       Name: codepipeline-newapi 
       Description: Codepipeline stack for codepipeline-newapi
       ServiceRole: !GetAtt CodeBuildRole.Arn
-      EncryptionKey: alias/codepipeline-kms-key
+      # EncryptionKey: alias/codepipeline-kms-key
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -108,4 +108,35 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 StackName: 'HelloApi-main-stack'
                 ChangeSetName: 'HelloApi-changeset'
+                RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
+        - Name: Newdeploy
+          Actions:
+            - Name: 'Newdeployment'
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CloudFormation
+              InputArtifacts:
+                - Name: BuildStack
+              RunOrder: 1
+              Configuration:
+                ActionMode: CHANGE_SET_REPLACE
+                Capabilities: CAPABILITY_NAMED_IAM
+                StackName: 'Second-stack'
+                ChangeSetName: 'NewChangesetname'
+                RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
+                TemplatePath: BuildStack::deploy/apistack.yml
+            - Name: HelloApi-runchangeset
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CloudFormation
+              RunOrder: 2 
+              Configuration:
+                ActionMode: CHANGE_SET_EXECUTE
+                Capabilities: CAPABILITY_NAMED_IAM
+                StackName: 'Second-stack'
+                ChangeSetName: 'NewChangesetname'
                 RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
