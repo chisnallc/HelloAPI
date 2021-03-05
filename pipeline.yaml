@@ -111,7 +111,7 @@ Resources:
                 RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
         - Name: Newdeploy
           Actions:
-            - Name: 'Newdeployment'
+            - Name: Newdeployment-createChangeset
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -127,7 +127,7 @@ Resources:
                 ChangeSetName: 'NewChangesetname'
                 RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
                 TemplatePath: BuildStack::deploy/apistack.yml
-            - Name: HelloApi-runchangeset
+            - Name: Newdeployment-RunChangeset
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
