@@ -4,10 +4,8 @@ Resources:
   MyRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Body:
-        OpenAPI specification: null
       Description: Project API
-      Name: gatewayAPI
+      Name: HelloApiGateway
   MyRestApiMethod:
     Type: AWS::ApiGateway::Method
     Properties:  
@@ -19,3 +17,5 @@ Resources:
       ResourceID: !GetAtt MyRestApi.RootResourceId
       RestApiId: !Ref MyRestApi
     
+      
+     
