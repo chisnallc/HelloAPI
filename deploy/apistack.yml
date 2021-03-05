@@ -8,3 +8,14 @@ Resources:
         OpenAPI specification: null
       Description: Project API
       Name: gatewayAPI
+  MyRestApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:  
+      HttpMethod: GET
+      Integration: 
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: arn:aws:apigateway:region:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:749144762306:function:HelloApi/invocations
+      ResourceID: !GetAtt MyRestApi.RootResourceId
+      RestApiId: !Ref MyRestApi
+    
