@@ -1,7 +1,10 @@
-MyRestApi:
-  Type: 'AWS::ApiGateway::RestApi'
-  Properties:
-    Body:
-      OpenAPI specification: null
-    Description: Project API
-    Name: gatewayAPI
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  MyRestApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Body:
+        OpenAPI specification: null
+      Description: Project API
+      Name: gatewayAPI
