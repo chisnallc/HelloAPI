@@ -118,7 +118,7 @@ Resources:
                 Version: '1'
                 Provider: CloudFormation
               InputArtifacts:
-                - Name: BuildStack
+                - Name: GitHubSource
               RunOrder: 1
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
@@ -126,7 +126,7 @@ Resources:
                 StackName: 'Second-stack'
                 ChangeSetName: 'NewChangesetname'
                 RoleArn: 'arn:aws:iam::749144762306:role/codepipeline-execution-role'
-                TemplatePath: BuildStack::deploy/apistack.yml
+                TemplatePath: GitHubSource::deploy/apistack.yml
             - Name: Newdeployment-RunChangeset
               ActionTypeId:
                 Category: Deploy
