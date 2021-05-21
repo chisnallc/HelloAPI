@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Transform: 'AWS::Serverless-2016-10-31'
+Transform: "AWS::Serverless-2016-10-31"
 Resources:
   Lambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: 'HelloApi'
+      FunctionName: "HelloApi"
       Handler: index.handler
       Runtime: nodejs12.x
       CodeUri: ../build
@@ -12,7 +12,7 @@ Resources:
       DeploymentPreference:
         Type: AllAtOnce
       Description: Lambda for API Gateway backend
-      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      Role: !GetAtt [LambdaExecutionRole, Arn]
       MemorySize: 128
       Timeout: 600
   LambdaLogGroup:
@@ -26,18 +26,15 @@ Resources:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          -
-            Action: sts:AssumeRole
+          - Action: sts:AssumeRole
             Effect: Allow
             Principal:
               Service: lambda.amazonaws.com
       Policies:
-        -
-          PolicyName: CloudwatchLogs
+        - PolicyName: CloudwatchLogs
           PolicyDocument:
             Statement:
-              -
-                Action:
+              - Action:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:GetLogEvents
@@ -45,10 +42,23 @@ Resources:
                 Resource:
                   - !GetAtt [LambdaLogGroup, Arn]
                 Effect: Allow
-  # LambdaPermission: 
-  #   Type: AWS::Lambda::Permission
-  #   Properties:
-  #     Action: lambda:InvokeFunction
-  #     FunctionName: !GetAtt Lambda.Arn
-  #     Principal: apigateway.amazonaws.com 
-  #     SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*'
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt Lambda.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*"
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      DefinitionUri: "./proxy-api-definition.yaml"
+      StageName: "live"
+      MethodSettings:
+        - DataTraceEnabled: true
+          LoggingLevel: "ERROR"
+          ResourcePath: "/"
+          HttpMethod: "*"
+      Variables:
+        ServerlessExpressLambdaFunctionName: !Ref Lambda
