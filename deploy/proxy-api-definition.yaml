@@ -1,36 +1,36 @@
 swagger: 2.0
 info:
-  title: 'hello-api-gateway'
+  title: "hello-api-gateway"
   description: Serverless API
 basePath: /
 schemes:
-- https
+  - https
 paths:
   /:
     x-amazon-apigateway-any-method:
       produces:
-      - application/json
+        - application/json
       responses: {}
       x-amazon-apigateway-integration:
         responses:
           default:
             statusCode: 200
-        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:749144762306:function:${stageVariables.ServerlessExpressLambdaFunctionName}/invocations
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:749144762306:function:HelloApi/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
   /{proxy+}:
     x-amazon-apigateway-any-method:
       produces:
-      - application/json
+        - application/json
       parameters:
-      - name: proxy
-        in: path
-        required: true
-        type: string
+        - name: proxy
+          in: path
+          required: true
+          type: string
       responses: {}
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:749144762306:function:${stageVariables.ServerlessExpressLambdaFunctionName}/invocations
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:749144762306:function:HelloApi/invocations
         httpMethod: POST
         type: aws_proxy
 definitions:
