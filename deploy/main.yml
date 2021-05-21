@@ -47,8 +47,8 @@ Resources:
                 Effect: Allow
   LambdaPermission: 
     Type: AWS::Lambda::Permission
-    Properties:  
+    Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt Lambda.Arn
       Principal: apigateway.amazonaws.com 
-      SourceArn: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:kk3mr8qy83/*/GET
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*'
