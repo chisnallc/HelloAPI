@@ -58,7 +58,7 @@ Resources:
       MethodSettings:
         - DataTraceEnabled: true
           LoggingLevel: "ERROR"
-          ResourcePath: "/"
+          ResourcePath: "/*"
           HttpMethod: "*"
       Variables:
         ServerlessExpressLambdaFunctionName: !Ref Lambda
