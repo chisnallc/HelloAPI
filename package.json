@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "build": "rm -rf build && mkdir build && cp -R src/* build && cp package.json build && cp package-lock.json build && cd build && npm ci --production && cd .. && cd build && zip -9 -r package.zip . && cd .."
+    "build-main-lambda": "rm -rf build-main-lambda && mkdir build-main-lambda && cp -R src/main-lambda/* build-main-lambda && cp src/main-lambda/package.json build-main-lambda && cp src/main-lambda/package-lock.json build-main-lambda && cd build-main-lambda && npm ci --production && cd .. && cd build-main-lambda && zip -9 -r package.zip . && cd .."
   },
   "repository": {
     "type": "git",
