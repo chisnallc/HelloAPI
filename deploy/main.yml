@@ -62,3 +62,9 @@ Resources:
           HttpMethod: "*"
       Variables:
         ServerlessExpressLambdaFunctionName: !Ref Lambda
+    MyAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../build-auth-lambda
+      Handler: index.handler
+      Runtime: nodejs12.x    
