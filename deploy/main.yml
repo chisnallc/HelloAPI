@@ -18,7 +18,7 @@ Resources:
   LambdaLogGroup:
     Type: "AWS::Logs::LogGroup"
     Properties:
-      LogGroupName: "/aws/lambda/rest-api-lambda"
+      LogGroupName: "/aws/lambda/HelloApi"
       RetentionInDays: 30
   LambdaExecutionRole:
     Type: AWS::IAM::Role
