@@ -7,7 +7,7 @@ Resources:
       FunctionName: "HelloApi"
       Handler: index.handler
       Runtime: nodejs12.x
-      CodeUri: ../build
+      CodeUri: ../build-main-lambda
       AutoPublishAlias: live
       DeploymentPreference:
         Type: AllAtOnce
