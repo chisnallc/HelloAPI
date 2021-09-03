@@ -1,0 +1,6 @@
+{
+  "account": "749144762306",
+  "name": "codepipeline-newapi",
+  "templateFile": "pipeline.yaml",
+  "region": "eu-west-1"
+}

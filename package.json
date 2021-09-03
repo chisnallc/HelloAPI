@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm test",
     "build-main-lambda": "rm -rf build-main-lambda && mkdir build-main-lambda && cp -R src/main-lambda/* build-main-lambda && cp src/main-lambda/package.json build-main-lambda && cp src/main-lambda/package-lock.json build-main-lambda && cd build-main-lambda && npm ci --production && cd .. && cd build-main-lambda && zip -9 -r package.zip . && cd ..",
-    "build-auth-lambda":  "rm -rf build-auth-lambda && mkdir build-auth-lambda && cp -R src/auth-lambda/* build-auth-lambda && cp src/auth-lambda/package.json build-auth-lambda && cp src/auth-lambda/package-lock.json build-auth-lambda && cd build-auth-lambda && npm ci --production && cd .. && cd build-auth-lambda && zip -9 -r package.zip . && cd .."
+    "build-auth-lambda":  "rm -rf build-auth-lambda && mkdir build-auth-lambda && cp -R src/auth-lambda/* build-auth-lambda && cp src/auth-lambda/package.json build-auth-lambda && cp src/auth-lambda/package-lock.json build-auth-lambda && cd build-auth-lambda && npm ci --production && cd .. && cd build-auth-lambda && zip -9 -r package.zip . && cd ..",
+    "pipeline": "npx bbc/tvr-codepipeline-updater#semver:^3.0 --config pipeline-config.json"
   },
   "repository": {
     "type": "git",
