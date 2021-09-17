@@ -4,7 +4,7 @@ Resources:
   Lambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "HelloApi"
+      FunctionName: HelloApi
       Handler: index.handler
       Runtime: nodejs12.x
       CodeUri: ../build-main-lambda
@@ -51,20 +51,65 @@ Resources:
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*"
 
   ApiGateway:
-    Type: AWS::Serverless::Api
+    DependsOn: Lambda
+    Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      DefinitionUri: "./proxy-api-definition.yaml"
-      StageName: "live"
-      MethodSettings:
-        - DataTraceEnabled: true
-          LoggingLevel: "ERROR"
-          ResourcePath: "/*"
-          HttpMethod: "*"
-      Variables:
-        ServerlessExpressLambdaFunctionName: !Ref Lambda
-    MyAuthFunction:
+      Name: hello-api-gateway
+
+  ApiGatewayDeployment:
+    Type: 'AWS::ApiGateway::Deployment'
+    Properties:
+      RestApiId:
+        Ref: ApiGateway
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - ApiGatewayResource
+      - ApiGatewayMethod
+
+  ApiGatewayStage:
+    Type: 'AWS::ApiGateway::Stage'
+    Properties:
+      RestApiId:
+        Ref: ApiGateway
+      DeploymentId:
+        Ref: ApiGatewayDeployment
+      StageName: prod
+
+  ApiGatewayResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      ParentId:
+        'Fn::GetAtt':
+          - ApiGateway
+          - RootResourceId
+      PathPart: home
+      RestApiId:
+        Ref: ApiGateway
+
+  ApiGatewayMethod:
+    DependsOn:
+      - ApiGateway
+      - Lambda
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: ApiGatewayResource
+      RestApiId:
+        Ref: ApiGateway
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Sub:
+            - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations
+            - LambdaArn: !GetAtt Lambda.Arn
+
+  MyAuthFunction:
     Type: AWS::Serverless::Function
+    FunctionName: HelloApiAuthFunction
     Properties:
       CodeUri: ../build-auth-lambda
       Handler: index.handler
-      Runtime: nodejs12.x    
+      Runtime: nodejs12.x

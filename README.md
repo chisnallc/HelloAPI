@@ -15,3 +15,6 @@ Creating and deploying an API
 - To update the code pipeline stack, run the following command:
 
 `npm run pipeline`
+
+API Endpoint: https://k417j6n280.execute-api.eu-west-1.amazonaws.com/prod/home
+

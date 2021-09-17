@@ -3,7 +3,7 @@ exports.handler = async event => {
       console.log(`Event: ${event}`)
       return {
         statusCode: 200,
-        body: 'Hello'
+        body: JSON.stringify('Hello')
       }
     } catch (e) {
       console.log(e)
