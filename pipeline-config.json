@@ -2,5 +2,6 @@
   "account": "749144762306",
   "name": "codepipeline-newapi",
   "templateFile": "pipeline.yaml",
+  "paramsFile": "parameters.json",
   "region": "eu-west-1"
 }
